@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="ThemeCoolTimer" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="android:windowBackground">@color/windowBackground</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:seekBarStyle">@style/SeekBarColor</item>
+    </style>
+
+    <style name="SeekBarColor" parent="Widget.AppCompat.SeekBar">
+        <item name="colorAccent">#d81b60</item>
+    </style>
+</resources>
