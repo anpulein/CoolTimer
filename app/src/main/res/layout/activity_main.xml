@@ -44,7 +44,7 @@
 
     <Button
         android:id="@+id/start_stop"
-        android:onClick="start_stop"
+        android:onClick="start"
         android:layout_width="85dp"
         android:layout_height="45dp"
         android:textColor="@android:color/white"

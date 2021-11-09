@@ -2,6 +2,8 @@ package com.example.cooltimer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -11,14 +13,16 @@ import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import java.util.concurrent.CountDownLatch;
+
 public class MainActivity extends AppCompatActivity {
 
     private TextView time;
     private SeekBar seekBar;
-    private int defaultTime = 30;
+    private int defaultTime = 60;
     private CountDownTimer timer;
     private Button st;
-    private boolean isButton = true;
+    private boolean isTimerOn = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,59 +33,13 @@ public class MainActivity extends AppCompatActivity {
         time = findViewById(R.id.time);
         st = findViewById(R.id.start_stop);
 
+        seekBar.setMax(600); // Max - 10 minuts
         seekBar.setProgress(defaultTime);
-        changeSeekBar(seekBar, time);
 
-        timer = new CountDownTimer(seekBar.getProgress() * 1000, 1000) {
-
-            @Override
-            public void onTick(long millisUntilFinished) {
-                time.setText(transformTime((int)(millisUntilFinished / 1000)));
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        };
-
-        st.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(isButton) {
-                    st.setText("Stop");
-                    countDown(seekBar, time, timer);
-                    isButton = false;
-                } else {
-                    st.setText("Start");
-                    timer.cancel();
-                    seekBar.setEnabled(true);
-                    defaultValue(seekBar, time, defaultTime);
-                    isButton = true;
-                }
-            }
-        });
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        defaultValue(seekBar, time, defaultTime);
-    }
-
-    static void changeSeekBar(SeekBar seekBar, TextView time) {
-        seekBar.setMax(600); //
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            int newProgress;
-
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if(fromUser) {
-                    time.setText(transformTime(progress));
-                    newProgress = progress;
-                }
+                time.setText(transformTime(progress));
             }
 
             @Override
@@ -91,28 +49,56 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                seekBar.setProgress(newProgress);
+
             }
-
         });
+
+
     }
 
-    static void countDown(SeekBar seekBar, TextView textView, CountDownTimer countDownTimer) {
-        seekBar.setEnabled(false);
-        countDownTimer.onTick((long)seekBar.getProgress());
-        countDownTimer.start();
+
+    public void start(View view) {
+
+        if(!isTimerOn) {
+            st.setText("Stop");
+            seekBar.setEnabled(false);
+            isTimerOn = true;
+            timer = new CountDownTimer(seekBar.getProgress() * 1000, 1000) {
+
+                @Override
+                public void onTick(long millisUntilFinished) {
+//                Log.d("Time tag: ", transformTime((int)(millisUntilFinished / 1000)));
+                    time.setText(transformTime((int)(millisUntilFinished / 1000)));
+                }
+
+                @Override
+                public void onFinish() {
+                    MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),
+                            R.raw.bell_sound);
+                    mediaPlayer.start();
+
+                    resetTimer();
+                }
+            }.start();
+
+        } else {
+            resetTimer();
+        }
+
     }
 
-    static void defaultValue(SeekBar seekBar, TextView textView, int defaultTime) {
+    private void resetTimer() {
+        timer.cancel();
+        time.setText(transformTime(defaultTime));
+        st.setText("Start");
+        seekBar.setEnabled(true);
         seekBar.setProgress(defaultTime);
-        textView.setText(transformTime(defaultTime));
+        isTimerOn = false;
     }
 
-
-    static String transformTime(int progress) {
+    static private String transformTime(int progress) {
         int m = (progress / 60) % 60;
         int s = progress % 60;
         return String.format("%02d:%02d", m, s);
     }
-
 }
