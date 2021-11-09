@@ -29,27 +29,29 @@
         app:srcCompat="@drawable/bell" />
 
     <TextView
-        android:id="@+id/times"
+        android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="175dp"
         android:layout_marginEnd="178dp"
         android:layout_marginBottom="385dp"
-        android:text="00:60"
-        android:textColor="@color/black"
         android:textSize="65sp"
+        android:text="00:60"
+        android:textColor="@android:color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/start_stop"
+        android:onClick="start_stop"
         android:layout_width="85dp"
-        android:layout_height="60dp"
-        android:shadowColor="@color/colorPrimary"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="@+id/times"
-        app:layout_constraintStart_toStartOf="@+id/times"
-        app:layout_constraintTop_toBottomOf="@+id/times" />
+        android:layout_height="45dp"
+        android:textColor="@android:color/white"
+        android:background="@color/colorPrimary"
+        android:text="Start"
+        app:layout_constraintEnd_toEndOf="@+id/time"
+        app:layout_constraintStart_toStartOf="@+id/time"
+        app:layout_constraintTop_toBottomOf="@+id/time" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
