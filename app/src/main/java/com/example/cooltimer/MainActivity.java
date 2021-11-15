@@ -84,9 +84,22 @@ public class MainActivity extends AppCompatActivity {
                     SharedPreferences sharedPreferences =
                             PreferenceManager.getDefaultSharedPreferences(getApplicationContext()); // Получаем доступ к файлу
                     if(sharedPreferences.getBoolean("enable_sound", true)) {
-                        MediaPlayer mediaPlayer = MediaPlayer.create(getApplicationContext(),
-                                R.raw.bell_sound);
-                        mediaPlayer.start();
+
+                        String melodyName = sharedPreferences.getString("timer_melody", "bell");
+
+                        if(melodyName.equals("bell")) {
+                            MediaPlayer  mediaPlayer = MediaPlayer.create(getApplicationContext(),
+                                    R.raw.bell_sound);
+                            mediaPlayer.start();
+                        } else if(melodyName.equals("alarm_siren")) {
+                            MediaPlayer  mediaPlayer = MediaPlayer.create(getApplicationContext(),
+                                    R.raw.alarm_siren_sound);
+                            mediaPlayer.start();
+                        } else if(melodyName.equals("bip")) {
+                            MediaPlayer  mediaPlayer = MediaPlayer.create(getApplicationContext(),
+                                    R.raw.bip_sound);
+                            mediaPlayer.start();
+                        }
                     }
 
                     resetTimer();
