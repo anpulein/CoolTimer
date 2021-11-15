@@ -4,7 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/Dima/AndroidStudioProjects/CoolTimer/app/src/main/res/drawable/seek_bg.xml" value="1.425" />
+        <entry key="..\:/Users/Dima/AndroidStudioProjects/CoolTimer/app/src/main/res/layout/activity_about.xml" value="0.14990942028985507" />
         <entry key="..\:/Users/Dima/AndroidStudioProjects/CoolTimer/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Users/Dima/AndroidStudioProjects/CoolTimer/app/src/main/res/layout/activity_settings.xml" value="0.24166666666666667" />
+        <entry key="..\:/Users/Dima/AndroidStudioProjects/CoolTimer/app/src/main/res/menu/timer_menu.xml" value="0.24166666666666667" />
+        <entry key="..\:/Users/Dima/AndroidStudioProjects/CoolTimer/app/src/main/res/xml/timer_preferences.xml" value="0.14266304347826086" />
       </map>
     </option>
   </component>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+<!--
+    title: Name Category
+    orderInCategory: position (Чем меньше, чем раньше появлется в меню)
+    showAsAction: View items
+-->
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="Settings"
+        android:orderInCategory="100"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_white_settings_24"
+        />
+
+    <item
+        android:id="@+id/action_about"
+        android:title="About"
+        android:orderInCategory="110"
+        app:showAsAction="never"
+        android:icon="@drawable/ic_baseline_question_answer_24"
+        />
+
+</menu>
