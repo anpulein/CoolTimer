@@ -2,16 +2,15 @@ package com.example.cooltimer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.Preference;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,17 +18,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.concurrent.CountDownLatch;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     private TextView time;
     private SeekBar seekBar;
-    private int defaultTime = 60;
+    private int defaultInterval = 30;
     private CountDownTimer timer;
     private Button st;
     private boolean isTimerOn = false;
+    SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,9 +39,10 @@ public class MainActivity extends AppCompatActivity {
         seekBar = findViewById(R.id.seekBar);
         time = findViewById(R.id.time);
         st = findViewById(R.id.start_stop);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
         seekBar.setMax(600); // Max - 10 minuts
-        seekBar.setProgress(defaultTime);
+        setIntervalFromSharedPreferences(sharedPreferences);
 
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -60,17 +61,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
     }
 
 
+    @SuppressLint("SetTextI18n")
     public void start(View view) {
 
         if(!isTimerOn) {
             st.setText("Stop");
             seekBar.setEnabled(false);
             isTimerOn = true;
-            timer = new CountDownTimer(seekBar.getProgress() * 1000, 1000) {
+            timer = new CountDownTimer(seekBar.getProgress() * 1000L, 1000) {
 
                 @Override
                 public void onTick(long millisUntilFinished) {
@@ -112,15 +115,16 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
     private void resetTimer() {
         timer.cancel();
-        time.setText(transformTime(defaultTime));
         st.setText("Start");
         seekBar.setEnabled(true);
-        seekBar.setProgress(defaultTime);
         isTimerOn = false;
+        setIntervalFromSharedPreferences(sharedPreferences);
     }
 
+    @SuppressLint("DefaultLocale")
     static private String transformTime(int progress) {
         int m = (progress / 60) % 60;
         int s = progress % 60;
@@ -138,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int id = item.getItemId();
+        int id = item.getItemId(); // Получаем элемент меню
         if(id == R.id.action_settings) {
             Intent openSettings = new Intent(this, SettingsActivity.class);
             startActivity(openSettings);
@@ -150,5 +154,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void setIntervalFromSharedPreferences(SharedPreferences sharedPreferences) {
+
+        defaultInterval = Integer.parseInt(sharedPreferences.getString("default_interval", "30"));
+        time.setText(transformTime(defaultInterval));
+        seekBar.setProgress(defaultInterval);
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if(key.equals("default_interval")) {
+            setIntervalFromSharedPreferences(sharedPreferences);
+        }
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this); // Снимаем с регистрии Listener
     }
 }
